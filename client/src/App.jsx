@@ -2,9 +2,12 @@
 import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import Uploader from './components/Uploader';
+import Chat from './components/Chat';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [documentId, setDocumentId] = useState(null);
 
   useEffect(() => {
     fetch('/api/me', { credentials: 'include' })
@@ -17,15 +20,19 @@ function App() {
       method: 'POST',
       credentials: 'include'
     });
-
     setUser(null);
   }
 
   if (user) {
     return (
       <main>
-        <p>Hi, {user.name}!</p>
-        <button onClick={logout}>Log out</button>
+        <p>
+          Hi, {user.name}!
+          <button onClick={logout}>Log out</button>
+        </p>
+
+        <Uploader onUploaded={setDocumentId} />
+        <Chat documentId={documentId} />
       </main>
     );
   }
